@@ -1,2 +1,38 @@
 #Skipping DB data
 DB/mssqldata/*
+
+#IDEA Intellij
+API/eseva-api/HELP.md
+API/eseva-api/target/
+API/eseva-api/.mvn/wrapper/*
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+API/eseva-api/.apt_generated
+API/eseva-api/.classpath
+API/eseva-api/.factorypath
+API/eseva-api/.project
+API/eseva-api/.settings
+API/eseva-api/.springBeans
+API/eseva-api/.sts4-cache
+
+### IntelliJ IDEA ###
+API/eseva-api/.idea
+API/eseva-api/*.iws
+API/eseva-api/*.iml
+API/eseva-api/*.ipr
+
+### NetBeans ###
+API/eseva-api//nbproject/private/
+API/eseva-api//nbbuild/
+API/eseva-api//dist/
+API/eseva-api//nbdist/
+API/eseva-api//.nb-gradle/
+API/eseva-api/build/
+API/eseva-api/!**/src/main/**/build/
+API/eseva-api/!**/src/test/**/build/
+
+### VS Code ###
+API/eseva-api/.vscode/
+
