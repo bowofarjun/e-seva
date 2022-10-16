@@ -6,7 +6,6 @@ import in.ac.bitspilani.wilp.esevaapi.service.IStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,7 +15,7 @@ public class StatusImpl implements IStatus {
     StatusRepository statusRepository;
 
     @Override
-    public List<Status> getAllStatus() {
-        return statusRepository.GET_ALL_STATUS();
+    public List<Status> getAllStatuses() {
+        return statusRepository.GET_ALL_STATUSES();
     }
 }

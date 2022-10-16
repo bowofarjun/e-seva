@@ -1,6 +1,6 @@
 package in.ac.bitspilani.wilp.esevaapi.controller;
 
-import in.ac.bitspilani.wilp.esevaapi.service.IStatus;
+import in.ac.bitspilani.wilp.esevaapi.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/status")
-public class StatusController {
+@RequestMapping("/service")
+public class ServiceController {
 
     @Autowired
-    IStatus status;
+    IService service;
 
     @GetMapping()
     @Transactional(readOnly=true)
-    public ResponseEntity getAllStatus()
+    public ResponseEntity getAllServices()
     {
-        return new ResponseEntity<>(status.getAllStatuses(), HttpStatus.OK);
+        return new ResponseEntity(service.getAllServices(), HttpStatus.OK);
     }
 }

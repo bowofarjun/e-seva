@@ -1,18 +1,24 @@
 package in.ac.bitspilani.wilp.esevaapi.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Status {
+public class Service {
     @Id
     @Column
     @Getter @Setter
-    private int statusId;
+    private int serviceId;
+
     @Column
     @Getter @Setter
-    private String statusName;
+    private String serviceName;
+
+    @Column
+    @Getter @Setter
+    private String serviceDescription;
 }
