@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "968ffed5-4ed3-4b4f-af65-bb83b9b5cb25",
+		"name": "E-Seva",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Statuses",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{esevaApiUrl}}/status",
+					"host": [
+						"{{esevaApiUrl}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Roles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{esevaApiUrl}}/role",
+					"host": [
+						"{{esevaApiUrl}}"
+					],
+					"path": [
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Languages",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{esevaApiUrl}}/language",
+					"host": [
+						"{{esevaApiUrl}}"
+					],
+					"path": [
+						"language"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Services",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{esevaApiUrl}}/service",
+					"host": [
+						"{{esevaApiUrl}}"
+					],
+					"path": [
+						"service"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register New User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "userId",
+							"value": "testuser",
+							"type": "default"
+						},
+						{
+							"key": "roleId",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "userName",
+							"value": "Test User",
+							"type": "default"
+						},
+						{
+							"key": "languageId",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "9876543210",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "default"
+						},
+						{
+							"key": "document",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "emailId",
+							"value": "testuser@email.com",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{esevaApiUrl}}/user",
+					"host": [
+						"{{esevaApiUrl}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
