@@ -20,7 +20,22 @@ public class UserImpl implements IUser {
     UserRepository userRepository;
 
     @Override
-    public RegistrationResponse addNewUser(RegistrationRequest registrationRequest) throws SQLException, IOException {
+    public RegistrationResponse addNewUser(RegistrationRequest registrationRequest) {
+
+        RegistrationResponse registrationResponse = new RegistrationResponse();
+        Blob blob;
+
+        try
+        {
+            blob = convertToBlobFromMultiPart(registrationRequest.getDocument());
+        }
+        catch(Exception ex)
+        {
+            registrationResponse.setErrorCode(500);
+            registrationResponse.setErrorMessage(ex.getMessage());
+            registrationResponse.setHttpStatusCode(500);
+            return registrationResponse;
+        }
 
         Map<String,?> map = userRepository.ADD_NEW_USER(registrationRequest.getUserId(),
                                                                 registrationRequest.getRoleId(),
@@ -29,10 +44,9 @@ public class UserImpl implements IUser {
                                                                 registrationRequest.getPhoneNumber(),
                                                                 registrationRequest.getEmailId(),
                                                                 registrationRequest.getPassword(),
-                                                                convertToBlobFromMultiPart(registrationRequest.getDocument())
-                );
+                                                                blob);
 
-        RegistrationResponse registrationResponse = new RegistrationResponse();
+
         if(Integer.parseInt(map.get("errorCode").toString())==0 && map.get("errorMessage")==null)
         {
             registrationResponse.setDocumentId(map.get("DocumentId").toString());
@@ -48,7 +62,7 @@ public class UserImpl implements IUser {
         return registrationResponse;
     }
 
-    private Blob convertToBlobFromMultiPart(MultipartFile multipartFile) throws IOException, SQLException {
+    private Blob convertToBlobFromMultiPart(MultipartFile multipartFile) throws SQLException, IOException {
         byte[] bytes = multipartFile.getBytes();
         Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
         return blob;
