@@ -5,5 +5,5 @@ import in.ac.bitspilani.wilp.esevaapi.model.Status;
 import java.util.List;
 
 public interface IStatus {
-    List<Status> getAllStatus();
+    List<Status> getAllStatuses();
 }

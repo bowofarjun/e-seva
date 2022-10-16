@@ -97,7 +97,7 @@ BEGIN
 	(
 	DocumentId varchar(50) PRIMARY KEY NOT NULL,
 	ParentDocumentId varchar(50) FOREIGN KEY REFERENCES DOCUMENT(DocumentId),
-	DocumentInfo nvarchar 
+	DocumentInfo varbinary(MAX) 
 	)
 END
 GO
@@ -118,7 +118,7 @@ BEGIN
 		CreatedDate date NOT NULL,
 		ModifiedDate date NOT NULL,
 		UpdatedBy varchar(20) FOREIGN KEY REFERENCES "USER"(UserId),
-		LoginAttempts int DEFAULT (1) CHECK(LoginAttempts <=5 AND LoginAttempts >=1)
+		LoginAttempts int DEFAULT (0) CHECK(LoginAttempts <=5 AND LoginAttempts >=0)
 	)
 END
 GO
