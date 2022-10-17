@@ -49,3 +49,12 @@ BEGIN
     DROP PROCEDURE [dbo].[ADD_NEW_USER]
 END
 GO
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[VALIDATE_USER_LOGIN]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[VALIDATE_USER_LOGIN]
+END
+GO
