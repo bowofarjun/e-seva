@@ -17,7 +17,7 @@ public class UserController {
     @Autowired
     IUser user;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "sign-up",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity addNewUser(@ModelAttribute RegistrationRequest requestBody) {
         RegistrationResponse response = null;
