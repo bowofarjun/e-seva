@@ -115,8 +115,8 @@ BEGIN
 		PhoneNumber varchar(15),
 		EmailId varchar(330) NOT NULL UNIQUE,
 		Password varchar(100) NOT NULL,
-		CreatedDate date NOT NULL,
-		ModifiedDate date NOT NULL,
+		CreatedDate DATETIME2 NOT NULL,
+		ModifiedDate DATETIME2 NOT NULL,
 		UpdatedBy varchar(20) FOREIGN KEY REFERENCES "USER"(UserId),
 		LoginAttempts int DEFAULT (0) CHECK(LoginAttempts <=5 AND LoginAttempts >=0)
 	)
@@ -130,9 +130,9 @@ BEGIN
 		SessionID varchar(50) UNIQUE NOT NULL,
 		UserId varchar(20) FOREIGN KEY REFERENCES "USER"(UserId),
 		StatusId int FOREIGN KEY REFERENCES STATUS(StatusID),
-		CreatedDate date NOT NULL,
-		ModifiedDate date NOT NULL,
-		ExpiryData date NOT NULL
+		CreatedDate DATETIME2 NOT NULL,
+		ModifiedDate DATETIME2 NOT NULL,
+		ExpiryDate DATETIME2 NOT NULL
 	)
 END
 GO
@@ -149,8 +149,8 @@ BEGIN
 	StatusId int FOREIGN KEY REFERENCES STATUS(StatusId),
 	DocumentId varchar(50) FOREIGN KEY REFERENCES DOCUMENT(DocumentId),
 	LanguageId int FOREIGN KEY REFERENCES LANGUAGE(LanguageId),
-	CreatedDate date NOT NULL,
-	ModifiedDate date NOT NULL
+	CreatedDate DATETIME2 NOT NULL,
+	ModifiedDate DATETIME2 NOT NULL
 	)
 END
 GO

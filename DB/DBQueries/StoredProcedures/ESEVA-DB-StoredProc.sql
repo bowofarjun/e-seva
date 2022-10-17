@@ -78,11 +78,11 @@ CREATE PROCEDURE ADD_NEW_USER
 @DocumentId varchar(50) OUTPUT,
 @StatusName varchar(15) OUTPUT,
 @errorCode int OUTPUT,
-@errorMessage nvarchar OUTPUT
+@errorMessage nvarchar(4000) OUTPUT
 AS
 	BEGIN TRY
 		BEGIN TRAN
-		    Declare @currTime DATE
+		    Declare @currTime DATETIME2
             Declare @StatusID int
 			set @currTime = GETUTCDATE();
 			set @DocumentId = NEWID();

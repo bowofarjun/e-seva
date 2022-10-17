@@ -4,7 +4,9 @@ import in.ac.bitspilani.wilp.esevaapi.model.RegistrationRequest;
 import in.ac.bitspilani.wilp.esevaapi.model.RegistrationResponse;
 import in.ac.bitspilani.wilp.esevaapi.repository.UserRepository;
 import in.ac.bitspilani.wilp.esevaapi.service.IUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,8 +15,11 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class UserImpl implements IUser {
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     UserRepository userRepository;
@@ -43,7 +48,7 @@ public class UserImpl implements IUser {
                                                                 registrationRequest.getLanguageId(),
                                                                 registrationRequest.getPhoneNumber(),
                                                                 registrationRequest.getEmailId(),
-                                                                registrationRequest.getPassword(),
+                                                                passwordEncoder.encode(registrationRequest.getPassword()),
                                                                 blob);
 
 
