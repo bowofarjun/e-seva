@@ -107,3 +107,74 @@ AS
 		ROLLBACK TRAN
 	END CATCH
 GO
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[VALIDATE_USER_LOGIN]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[VALIDATE_USER_LOGIN]
+END
+GO
+
+CREATE PROCEDURE VALIDATE_USER_LOGIN
+@UserId varchar(20),
+@Password varchar(100),
+@isLoginSuccessful bit OUTPUT,
+@loginAttempts int OUTPUT,
+@RoleName varchar(15) OUTPUT,
+@SessionId varchar(50) OUTPUT,
+@StatusName varchar(15) OUTPUT,
+@errorCode int OUTPUT,
+@errorMessage nvarchar(4000) OUTPUT
+AS
+	BEGIN TRY
+		BEGIN TRAN
+			DECLARE @toMatchPassword varchar(100)
+			DECLARE @currTime Datetime2
+			DECLARE @expTime Datetime2
+		    set @errorCode=0
+			set @errorMessage=NULL
+			set @isLoginSuccessful=0
+			set @currTime = GETUTCDATE()
+			select @expTime=dateadd(minute, 15, @currTime)
+			SELECT @toMatchPassword=U.Password, @loginAttempts=U.LoginAttempts, @RoleName=R.RoleName, @StatusName=S.StatusName FROM ESEVA.DBO."USER" AS U 
+			JOIN
+			ESEVA.DBO.ROLE AS R
+			ON R.RoleID=U.RoleId
+			JOIN 
+			ESEVA.DBO.STATUS AS S
+			ON S.StatusID=U.StatusID
+			WHERE UserId=@UserId
+
+			IF (@StatusName='ACTIVE')
+				BEGIN
+					IF(@Password = @toMatchPassword)
+						BEGIN
+							set @isLoginSuccessful=1
+							UPDATE ESEVA.DBO."USER"
+							SET LoginAttempts=0
+							WHERE UserId=@UserId
+
+							set @SessionId = NEWID()
+							INSERT INTO ESEVA.DBO.SESSION
+							(SessionID,UserId,StatusId,CreatedDate,ModifiedDate,ExpiryDate)
+							VALUES
+							(@SessionId,@UserId,1,@currTime,@currTime,@expTime)
+						END
+					ELSE
+						BEGIN
+                            set @loginAttempts=@loginAttempts+1;
+							UPDATE ESEVA.DBO."USER"
+							SET LoginAttempts=@loginAttempts
+							WHERE UserId=@UserId
+						END
+				END
+		COMMIT TRAN
+	END TRY
+	BEGIN CATCH
+        set @errorCode = ERROR_NUMBER()
+        set @errorMessage = ERROR_MESSAGE()
+		ROLLBACK TRAN
+	END CATCH
+GO
