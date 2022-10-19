@@ -22,6 +22,18 @@ import java.util.Date;
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorCode", type = Integer.class),
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorMessage", type = String.class),
 })
+@NamedStoredProcedureQuery(name="VALIDATE_USER_LOGIN", procedureName = "VALIDATE_USER_LOGIN", parameters = {
+        @StoredProcedureParameter(mode= ParameterMode.IN,name = "UserId", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.IN,name = "Password", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "isLoginSuccessful", type = Integer.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "UserName", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "LoginAttempts", type = Integer.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "RoleName", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "SessionId", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "StatusName", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorCode", type = Integer.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorMessage", type = String.class),
+})
 public class User {
     @Id
     @Column
