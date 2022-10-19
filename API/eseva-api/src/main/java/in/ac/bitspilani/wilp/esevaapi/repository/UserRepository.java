@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, String> {
                                       @Param("Password") String password,
                                       @Param("Document") Blob document
     );
+
+    @Procedure(name="VALIDATE_USER_LOGIN")
+    Map<String,?> VALIDATE_USER_LOGIN(@Param("UserId") String userId,@Param("Password") String password);
 }
