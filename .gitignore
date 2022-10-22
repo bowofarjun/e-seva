@@ -36,3 +36,26 @@ API/eseva-api/!**/src/test/**/build/
 ### VS Code ###
 API/eseva-api/.vscode/
 
+### Skipping UI Data in VS Code ###
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# dependencies
+UI/eseva-ui/node_modules
+UI/eseva-ui/.pnp
+UI/eseva-ui.pnp.js
+
+# testing
+UI/eseva-ui/coverage
+
+# production
+UI/eseva-ui/build
+
+# misc
+UI/eseva-ui/.DS_Store
+UI/eseva-ui/.env.local
+UI/eseva-ui/.env.development.local
+UI/eseva-ui/.env.test.local
+UI/eseva-ui/.env.production.local
+
+UI/eseva-ui/npm-debug.log*
+UI/eseva-ui/yarn-debug.log*
+UI/eseva-ui/yarn-error.log*
