@@ -1,10 +1,44 @@
 import React from "react";
+import Header from "./Header";
+import {
+    BrowserRouter,
+    Route, Routes
+  } from "react-router-dom";
+import Home from "./Home";
+import Footer from "./Footer";
+import About from "./About";
+import Services from "./Services";
+import Contact from "./Contact";
+import LoginRegister from "./LoginRegister";
+import AddNewService from "./AddNewService";
+import PreviousServiceRequests from "./PreviousServiceRequests";
+import PageNotFound from "./PageNotFound";
 
 const Main = ()=>{
     return (
-        <div>
-            This is the main component for E-SEVA.
-        </div>
+        <>
+        <BrowserRouter>
+            <div><Header username=""/></div>
+            
+            <div style={{height:'90vh'}}>
+                
+                    <Routes>
+                        <Route path="/" element={<Home/>} exact />
+                        <Route path="/home" element={<Home/>} exact />
+                        <Route path="/about" element={<About/>} exact />
+                        <Route path="/services" element={<Services/>} exact />
+                        <Route path="/contact" element={<Contact/>} exact />
+                        <Route path="/login-or-register" element={<LoginRegister/>} exact />
+                        <Route path="/new-service-request" element={<AddNewService/>} exact />
+                        <Route path="/previous-service-requests" element={<PreviousServiceRequests/>} exact/>
+                        <Route path="*" element={<PageNotFound/>} />
+                    </Routes>
+                
+            </div>
+            
+            <div> <Footer/></div>
+            </BrowserRouter>
+        </>
     );
 }
 
