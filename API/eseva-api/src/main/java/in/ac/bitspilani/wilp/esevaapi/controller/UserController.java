@@ -5,18 +5,23 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.microsoft.sqlserver.jdbc.StringUtils;
 import in.ac.bitspilani.wilp.esevaapi.model.LoginRequest;
 import in.ac.bitspilani.wilp.esevaapi.model.LoginResponse;
 import in.ac.bitspilani.wilp.esevaapi.model.RegistrationRequest;
 import in.ac.bitspilani.wilp.esevaapi.model.RegistrationResponse;
 import in.ac.bitspilani.wilp.esevaapi.service.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
@@ -42,7 +47,14 @@ public class UserController {
 
         response = user.validateUserLogin(requestBody);
 
-        return new ResponseEntity(response, HttpStatus.valueOf(response.getHttpStatusCode()));
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        if(!StringUtils.isEmpty(response.getAccessToken()))
+        {
+            responseHeaders.add("Set-Cookie","Authorization="+response.getAccessToken()+";Max-age=900;Path=/;HttpOnly;");
+        }
+
+        return new ResponseEntity(response, responseHeaders, HttpStatus.valueOf(response.getHttpStatusCode()));
     }
 
     @PreAuthorize("hasRole('ROLE_CITIZEN')")

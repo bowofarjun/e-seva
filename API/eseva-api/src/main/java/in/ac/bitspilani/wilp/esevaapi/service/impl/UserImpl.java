@@ -98,18 +98,21 @@ public class UserImpl implements IUser {
                 response.setErrorCode(404);
                 response.setHttpStatusCode(404);
                 response.setErrorMessage("USER DOESN'T EXIST");
+                response.setStatus(statusName);
             }
             else if(loginAttempts==6 && statusName.equalsIgnoreCase("ACTIVE"))
             {
                 response.setErrorCode(401);
                 response.setHttpStatusCode(401);
                 response.setErrorMessage("ACCOUNT IS LOCKED AND WILL BE DISABLED. PLEASE CHECK WITH ADMIN");
+                response.setStatus(statusName);
             }
             else if(loginAttempts<6 && statusName.equalsIgnoreCase("INACTIVE"))
             {
                 response.setErrorCode(401);
                 response.setHttpStatusCode(401);
                 response.setErrorMessage("ACCOUNT IS DISABLED. PLEASE CHECK WITH ADMIN");
+                response.setStatus(statusName);
             }
             else
             {
@@ -117,6 +120,7 @@ public class UserImpl implements IUser {
                 response.setErrorCode(errorCode);
                 response.setHttpStatusCode(401);
                 response.setPendingLoginAttempts(5-loginAttempts);
+                response.setStatus(statusName);
             }
         }
         return response;

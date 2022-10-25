@@ -70,9 +70,17 @@ public class EsevaJWTTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        Optional<String> bearerToken;
+        try {
+            bearerToken = Arrays.stream(req.getCookies()).filter(cookie -> cookie.getName().equalsIgnoreCase("Authorization")).map(cookie -> cookie.getValue()).findFirst();
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
+
+        if (bearerToken != null && bearerToken.get()!=null) {
+            return bearerToken.get();
         }
         return null;
     }

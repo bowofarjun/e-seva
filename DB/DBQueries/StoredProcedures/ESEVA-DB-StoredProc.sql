@@ -54,7 +54,7 @@ GO
 
 CREATE PROCEDURE [dbo].[GET_ALL_SERVICES]
 AS
-	SELECT ServiceId, ServiceName, ServiceDescription FROM ESEVA.dbo.SERVICE
+	SELECT ServiceId, ServiceName, ServiceDescription, ServiceImgLoc FROM ESEVA.dbo.SERVICE
 GO
 
 IF EXISTS ( SELECT * 
@@ -137,6 +137,7 @@ AS
 		    set @errorCode=0
 			set @errorMessage=NULL
 			set @isLoginSuccessful=0
+			set @LoginAttempts=0
 			set @currTime = GETUTCDATE()
 			select @expTime=dateadd(minute, 15, @currTime)
 			SELECT @toMatchPassword=U.Password, @LoginAttempts=U.LoginAttempts, @RoleName=R.RoleName, @StatusName=S.StatusName, @UserName=U.UserName FROM ESEVA.DBO."USER" AS U 
