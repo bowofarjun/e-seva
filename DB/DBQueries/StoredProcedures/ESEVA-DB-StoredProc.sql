@@ -311,7 +311,7 @@ AS
 
 	IF(@RoleId=3)
 		BEGIN
-			SELECT SR.ServiceRequestId,SR.UpdatedBy,SR.RequestedBy,SR.RequestedFor,SR.ServiceId, S.StatusName,SR.DocumentId,L.LanguageName,SR.ServiceRequestDescription,SR.CreatedDate,SR.ModifiedDate 
+			SELECT SR.ServiceRequestId,SR.UpdatedBy,SR.RequestedBy,SR.RequestedFor,SC.ServiceName, S.StatusName,SR.DocumentId,L.LanguageName,SR.ServiceRequestDescription,SR.CreatedDate,SR.ModifiedDate 
 			FROM SERVICEREQUEST AS SR 
 			JOIN STATUS AS S ON S.StatusID=SR.StatusId 
 			JOIN LANGUAGE AS L ON L.LanguageID=SR.LanguageId
@@ -320,7 +320,7 @@ AS
 		END
 	ELSE
 		BEGIN
-			SELECT SR.ServiceRequestId,SR.UpdatedBy,SR.RequestedBy,SR.RequestedFor,SR.ServiceId, S.StatusName,SR.DocumentId,L.LanguageName,SR.ServiceRequestDescription,SR.CreatedDate,SR.ModifiedDate 
+			SELECT SR.ServiceRequestId,SR.UpdatedBy,SR.RequestedBy,SR.RequestedFor,SC.ServiceName, S.StatusName,SR.DocumentId,L.LanguageName,SR.ServiceRequestDescription,SR.CreatedDate,SR.ModifiedDate 
 			FROM SERVICEREQUEST AS SR 
 			JOIN STATUS AS S ON S.StatusID=SR.StatusId 
 			JOIN LANGUAGE AS L ON L.LanguageID=SR.LanguageId
@@ -328,4 +328,92 @@ AS
 			WHERE RequestedBy=@UserId OR RequestedFor=@UserId 
 			ORDER BY CreatedDate DESC
 		END
+GO
+
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[UPDATE_SERVICE_REQUEST_STATUS]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[UPDATE_SERVICE_REQUEST_STATUS]
+END
+GO
+
+CREATE PROCEDURE UPDATE_SERVICE_REQUEST_STATUS
+@ServiceRequestId varchar(50),
+@StatusId int,
+@errorCode int OUTPUT,
+@errorMessage nvarchar(4000) OUTPUT
+AS
+	BEGIN TRY
+		BEGIN TRAN
+		DECLARE @svcReqId varchar(50)
+		set @errorCode=0
+		set @errorMessage=NULL
+		SELECT @svcReqId=ServiceRequestId FROM SERVICEREQUEST WHERE ServiceRequestId=@ServiceRequestId
+
+		IF(@svcReqId=@ServiceRequestId)
+			BEGIN
+				UPDATE SERVICEREQUEST
+				set StatusId=@StatusId
+				WHERE ServiceRequestId=@ServiceRequestId
+			END	
+			
+		ELSE
+			BEGIN
+				set @errorCode=1
+				set @errorMessage='SERVICE REQUESTID NOT FOUND'
+			END
+		COMMIT TRAN
+	END TRY
+	BEGIN CATCH
+		set @errorCode = ERROR_NUMBER()
+		set @errorMessage = ERROR_MESSAGE()
+		ROLLBACK TRAN
+	END CATCH
+GO
+
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[UPDATE_USER_STATUS]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[UPDATE_USER_STATUS]
+END
+GO
+
+CREATE PROCEDURE UPDATE_USER_STATUS
+@UserId varchar(20),
+@StatusId int,
+@errorCode int OUTPUT,
+@errorMessage nvarchar(4000) OUTPUT
+AS
+	BEGIN TRY
+		BEGIN TRAN
+		DECLARE @usId varchar(20)
+		set @errorCode=0
+		set @errorMessage=NULL
+		SELECT @usId=UserId FROM ESEVA.DBO."USER" WHERE UserId=@UserId
+
+		IF(@usId=@UserId)
+			
+			BEGIN
+				UPDATE ESEVA.DBO."USER"
+				set StatusId=@StatusId
+				WHERE UserId=@UserId
+			END	
+		ELSE
+		BEGIN
+				set @errorCode=1
+				set @errorMessage='USERID NOT FOUND'
+		END
+		COMMIT TRAN	
+	END TRY
+	BEGIN CATCH
+		set @errorCode = ERROR_NUMBER()
+		set @errorMessage = ERROR_MESSAGE()
+		ROLLBACK TRAN
+	END CATCH
 GO

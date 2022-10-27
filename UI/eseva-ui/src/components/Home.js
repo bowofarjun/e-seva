@@ -1,7 +1,7 @@
 import React from "react";
 import { Container,Card,Button } from "react-bootstrap";
 
-const Home=(props)=>{
+const Home=()=>{
     return (
         <>
             <Container style={{textAlign:'center'}}>

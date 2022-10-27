@@ -25,4 +25,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Procedure(name="VALIDATE_USER_LOGIN")
     Map<String,?> VALIDATE_USER_LOGIN(@Param("UserId") String userId,@Param("Password") String password);
+
+    @Procedure(name = "UPDATE_USER_STATUS")
+    Map<String,?> UPDATE_USER_STATUS(@Param("UserId") String userId,@Param("StatusId") Integer statusId);
 }

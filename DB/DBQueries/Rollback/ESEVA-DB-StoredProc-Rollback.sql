@@ -76,3 +76,21 @@ BEGIN
     DROP PROCEDURE [dbo].[GET_ALL_SERVICE_REQUESTS_FOR_A_USER]
 END
 GO
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[UPDATE_SERVICE_REQUEST_STATUS]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[UPDATE_SERVICE_REQUEST_STATUS]
+END
+GO
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[UPDATE_USER_STATUS]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[UPDATE_USER_STATUS]
+END
+GO

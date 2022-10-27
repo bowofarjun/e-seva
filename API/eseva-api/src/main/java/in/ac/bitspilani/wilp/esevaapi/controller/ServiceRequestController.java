@@ -3,6 +3,8 @@ package in.ac.bitspilani.wilp.esevaapi.controller;
 import in.ac.bitspilani.wilp.esevaapi.access.EsevaJWTTokenProvider;
 import in.ac.bitspilani.wilp.esevaapi.model.NewServiceRequestRequest;
 import in.ac.bitspilani.wilp.esevaapi.model.NewServiceRequestResponse;
+import in.ac.bitspilani.wilp.esevaapi.model.UpdateServiceRequestStatusRequest;
+import in.ac.bitspilani.wilp.esevaapi.model.UpdateServiceRequestStatusResponse;
 import in.ac.bitspilani.wilp.esevaapi.service.IServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,5 +46,15 @@ public class ServiceRequestController {
 
         NewServiceRequestResponse newServiceRequestResponse = serviceRequest.newServiceRequest(userId, newServiceRequestRequest);
         return new ResponseEntity(newServiceRequestResponse, HttpStatus.valueOf(newServiceRequestResponse.getHttpStatusCode()));
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity updateServiceRequestStatus(@RequestBody UpdateServiceRequestStatusRequest updateServiceRequestStatusRequest)
+    {
+        UpdateServiceRequestStatusResponse response= serviceRequest.updateServiceRequestStatus(updateServiceRequestStatusRequest);
+
+        return new ResponseEntity(response, HttpStatus.valueOf(response.getHttpStatusCode()));
     }
 }

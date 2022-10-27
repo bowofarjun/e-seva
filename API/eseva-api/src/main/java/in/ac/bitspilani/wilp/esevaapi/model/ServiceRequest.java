@@ -20,6 +20,12 @@ import java.util.Date;
         @StoredProcedureParameter(name = "errorCode",mode = ParameterMode.OUT, type=Integer.class),
         @StoredProcedureParameter(name = "errorMessage", mode = ParameterMode.OUT, type = String.class)}
 )
+@NamedStoredProcedureQuery(name = "UPDATE_SERVICE_REQUEST_STATUS", procedureName = "UPDATE_SERVICE_REQUEST_STATUS", parameters = {
+        @StoredProcedureParameter(name = "ServiceRequestId", mode = ParameterMode.IN, type = String.class),
+        @StoredProcedureParameter(name = "StatusId",mode = ParameterMode.IN, type = Integer.class),
+        @StoredProcedureParameter(name = "errorCode",mode = ParameterMode.OUT, type=Integer.class),
+        @StoredProcedureParameter(name = "errorMessage", mode = ParameterMode.OUT, type = String.class)
+})
 @Entity
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ServiceRequest extends ErrorResponse{

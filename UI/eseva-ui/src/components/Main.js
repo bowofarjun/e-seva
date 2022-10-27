@@ -13,13 +13,14 @@ import LoginRegister from "./LoginRegister";
 import PreviousServiceRequests from "./PreviousServiceRequests";
 import PageNotFound from "./PageNotFound";
 import NewServiceRequest from "./NewServiceRequest";
+import Admin from "./Admin";
 
 const Main = ()=>{
 
     return (
         <>
         <BrowserRouter>
-            <div><Header username=""/></div>
+            <div><Header/></div>
             
             <div style={{height:'90vh'}}>
                     <Routes>
@@ -31,6 +32,7 @@ const Main = ()=>{
                         <Route path="/login-or-register" element={<LoginRegister/>} exact />
                         <Route path="/new-service-request" element={<NewServiceRequest/>} exact />
                         <Route path="/previous-service-requests" element={<PreviousServiceRequests/>} exact/>
+                        <Route path="/admin" element={<Admin/>} exact />
                         <Route path="*" element={<PageNotFound/>} />
                     </Routes>
                 

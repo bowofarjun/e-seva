@@ -2,10 +2,7 @@ package in.ac.bitspilani.wilp.esevaapi.controller;
 
 import com.microsoft.sqlserver.jdbc.StringUtils;
 import in.ac.bitspilani.wilp.esevaapi.access.EsevaJWTTokenProvider;
-import in.ac.bitspilani.wilp.esevaapi.model.LoginRequest;
-import in.ac.bitspilani.wilp.esevaapi.model.LoginResponse;
-import in.ac.bitspilani.wilp.esevaapi.model.RegistrationRequest;
-import in.ac.bitspilani.wilp.esevaapi.model.RegistrationResponse;
+import in.ac.bitspilani.wilp.esevaapi.model.*;
 import in.ac.bitspilani.wilp.esevaapi.service.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -63,11 +60,28 @@ public class UserController {
         String roleName = esevaJWTTokenProvider.getRoleName(token);
         String userName = esevaJWTTokenProvider.getUserName(token);
 
-        //This is a test api to check if JWT authentication is working
         return new ResponseEntity("{\n" +
                 "    \"userId\": \""+userId+"\",\n" +
                 "    \"userName\": \""+userName+"\",\n" +
                 "    \"roleName\": \""+roleName+"\"\n" +
                 "}",HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_CITIZEN','ROLE_VENDOR','ROLE_ADMIN')")
+    @DeleteMapping(path = "/logout")
+    public ResponseEntity logout()
+    {
+        HttpHeaders responseHeaders=new HttpHeaders();
+        responseHeaders.add("Set-Cookie","Authorization=;Max-age=0;Path=/;HttpOnly;");
+        return new ResponseEntity(responseHeaders,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity updateUserStatus(@RequestBody UpdateUserStatusRequest updateUserStatusRequest)
+    {
+        UpdateUserStatusResponse updateUserStatusResponse= user.updateUserStatus(updateUserStatusRequest);
+        return new ResponseEntity(updateUserStatusResponse, HttpStatus.valueOf(updateUserStatusResponse.getHttpStatusCode()));
     }
 }

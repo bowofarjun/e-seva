@@ -37,9 +37,17 @@ const PreviousServiceRequests =()=>{
                 <h2 style={{marginBottom:'2rem'}}>Service Request History</h2>
 
                 {previousServiceRequestData.map((item)=>
-                <ServiceRequest props={item} />)
+                <ServiceRequest serviceRequestId={item.serviceRequestId} 
+                serviceName={item.serviceName}
+                requestedBy={item.requestedBy}
+                requestedFor={item.requestedFor}
+                languageName={item.languageName}
+                createdDate={item.createdDate}
+                modifiedDate={item.modifiedDate}
+                statusName={item.statusName}
+                 />)
                 }
-                
+
             </div>
             }
         </>

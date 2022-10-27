@@ -68,7 +68,9 @@ const LoginRegister=()=>{
                 clearForm("signin-form");
                 setLoginData({userId:null,password:null})
                 notify("LOGIN SUCCESSFUL", true)
-                window.location.replace("/");
+                sleep(2000).then(() => {
+                    window.location.href = "/";
+                    })
                 
                 
             },
@@ -78,6 +80,10 @@ const LoginRegister=()=>{
             }
         );          
     }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+   }
 
     const onSignUpButtonSubmit=(e)=>{
         e.preventDefault();
