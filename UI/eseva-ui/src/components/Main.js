@@ -10,18 +10,18 @@ import About from "./About";
 import Services from "./Services";
 import Contact from "./Contact";
 import LoginRegister from "./LoginRegister";
-import AddNewService from "./AddNewService";
 import PreviousServiceRequests from "./PreviousServiceRequests";
 import PageNotFound from "./PageNotFound";
+import NewServiceRequest from "./NewServiceRequest";
 
 const Main = ()=>{
+
     return (
         <>
         <BrowserRouter>
             <div><Header username=""/></div>
             
             <div style={{height:'90vh'}}>
-                
                     <Routes>
                         <Route path="/" element={<Home/>} exact />
                         <Route path="/home" element={<Home/>} exact />
@@ -29,7 +29,7 @@ const Main = ()=>{
                         <Route path="/services" element={<Services/>} exact />
                         <Route path="/contact" element={<Contact/>} exact />
                         <Route path="/login-or-register" element={<LoginRegister/>} exact />
-                        <Route path="/new-service-request" element={<AddNewService/>} exact />
+                        <Route path="/new-service-request" element={<NewServiceRequest/>} exact />
                         <Route path="/previous-service-requests" element={<PreviousServiceRequests/>} exact/>
                         <Route path="*" element={<PageNotFound/>} />
                     </Routes>

@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import axios from "axios";
 
-const Header = (props) =>{
+const Header = () =>{
+
+    useEffect(()=>{
+        let headers = {
+            'Content-Type': 'application/json'
+        };
+
+        let url='/api/user/whoami';
+
+        axios.get(url, {headers: headers}).then(
+            (response)=>{
+                localStorage.setItem('userId', response.data.userId)
+                localStorage.setItem('userName', response.data.userName)
+                localStorage.setItem('roleName', response.data.roleName)
+            },
+            (error)=>{
+                console.log(error)
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('roleName');
+            }
+        );
+    },[]);
+
     return (
     <>
         <Navbar bg="dark" variant="dark" style={{marginBottom:'1rem'}}>
@@ -19,7 +43,7 @@ const Header = (props) =>{
                 </Nav>
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
-                        <u>{props.username!=null && props.username.length!==0? "Hi, "+props.username:<Nav.Link href="/login-or-register">Login\Register</Nav.Link>}</u>
+                        <u>{localStorage.getItem('userName')!=null? "Hi, "+localStorage.getItem('userName'):<Nav.Link href="/login-or-register">Login\Register</Nav.Link>}</u>
                     </Navbar.Text>
                 </Navbar.Collapse>
             </Container>

@@ -58,3 +58,21 @@ BEGIN
     DROP PROCEDURE [dbo].[VALIDATE_USER_LOGIN]
 END
 GO
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[NEW_SERVICE_REQUEST]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[NEW_SERVICE_REQUEST]
+END
+GO
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[GET_ALL_SERVICE_REQUESTS_FOR_A_USER]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[GET_ALL_SERVICE_REQUESTS_FOR_A_USER]
+END
+GO

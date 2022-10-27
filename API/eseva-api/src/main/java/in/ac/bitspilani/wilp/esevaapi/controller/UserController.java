@@ -1,11 +1,7 @@
 package in.ac.bitspilani.wilp.esevaapi.controller;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.microsoft.sqlserver.jdbc.StringUtils;
+import in.ac.bitspilani.wilp.esevaapi.access.EsevaJWTTokenProvider;
 import in.ac.bitspilani.wilp.esevaapi.model.LoginRequest;
 import in.ac.bitspilani.wilp.esevaapi.model.LoginResponse;
 import in.ac.bitspilani.wilp.esevaapi.model.RegistrationRequest;
@@ -18,15 +14,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    EsevaJWTTokenProvider esevaJWTTokenProvider;
     @Autowired
     IUser user;
 
@@ -57,13 +54,20 @@ public class UserController {
         return new ResponseEntity(response, responseHeaders, HttpStatus.valueOf(response.getHttpStatusCode()));
     }
 
-    @PreAuthorize("hasRole('ROLE_CITIZEN')")
-    @GetMapping(path = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity testAuthentication()
+    @PreAuthorize("hasAnyRole('ROLE_CITIZEN','ROLE_VENDOR','ROLE_ADMIN')")
+    @GetMapping(path = "/whoami", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity whoami(HttpServletRequest httpServletRequest)
     {
+        String token = esevaJWTTokenProvider.resolveToken(httpServletRequest);
+        String userId = esevaJWTTokenProvider.getUserId(token);
+        String roleName = esevaJWTTokenProvider.getRoleName(token);
+        String userName = esevaJWTTokenProvider.getUserName(token);
+
         //This is a test api to check if JWT authentication is working
         return new ResponseEntity("{\n" +
-                "    \"OUTPUT\":\"TEST OK\"\n" +
+                "    \"userId\": \""+userId+"\",\n" +
+                "    \"userName\": \""+userName+"\",\n" +
+                "    \"roleName\": \""+roleName+"\"\n" +
                 "}",HttpStatus.OK);
     }
 }

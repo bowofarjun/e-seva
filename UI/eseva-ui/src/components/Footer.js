@@ -3,7 +3,7 @@ import React from "react";
 const Footer=(props)=>{
     return (
         <>
-            <div style={{background:"black",color:"white",height:"5vh",textAlign:"center",padding:"2px"}}>
+            <div id="footer" style={{background:"black",color:"white",height:"5vh",width:'100vw',textAlign:"center",padding:"2px"}}>
                 <span>
                     © {(new Date().getFullYear())} E-SEVA
                 </span>

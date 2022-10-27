@@ -236,3 +236,96 @@ AS
 		 ROLLBACK TRAN
 	END CATCH
 GO
+
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[NEW_SERVICE_REQUEST]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[NEW_SERVICE_REQUEST]
+END
+GO
+
+CREATE PROCEDURE NEW_SERVICE_REQUEST
+@RequestedBy varchar(20),
+@RequestedFor varchar(20),
+@ServiceId int,
+@LanguageId int,
+@ServiceRequestDescription nvarchar(4000),
+@Document varbinary(max),
+@DocumentId varchar(50) OUTPUT,
+@ServiceRequestId varchar(50) OUTPUT,
+@errorCode int OUTPUT,
+@errorMessage nvarchar(4000) OUTPUT
+AS
+	BEGIN TRY
+	    BEGIN TRAN
+
+			DECLARE @StatusId int
+			DECLARE @currTime DATETIME2
+			
+			set @errorCode=0
+			set @errorMessage=null
+			set @currTime=GETUTCDATE()
+			set @StatusId=3
+			set @DocumentId=NEWID()
+
+			INSERT INTO ESEVA.DBO.DOCUMENT
+			(DocumentId, DocumentInfo, ParentDocumentId)
+			VALUES
+			(@DocumentId, @Document, @DocumentId)
+
+			set @ServiceRequestId=NEWID()
+
+			INSERT INTO ESEVA.DBO.SERVICEREQUEST
+			(ServiceRequestId,UpdatedBy,RequestedBy,RequestedFor,ServiceId, StatusId,DocumentId,LanguageId,ServiceRequestDescription,CreatedDate,ModifiedDate)
+			VALUES
+			(@ServiceRequestId,@RequestedBy,@RequestedBy,@RequestedFor,@ServiceId,@StatusId,@DocumentId,@LanguageId,@ServiceRequestDescription,@currTime,@currTime)
+		COMMIT TRAN	
+	END TRY
+	BEGIN CATCH
+		 set @errorCode = ERROR_NUMBER()
+		 set @errorMessage = ERROR_MESSAGE()
+		 ROLLBACK TRAN
+	END CATCH
+GO
+
+
+IF EXISTS ( SELECT * 
+            FROM   sysobjects 
+            WHERE  id = object_id(N'[dbo].[GET_ALL_SERVICE_REQUESTS_FOR_A_USER]') 
+                   and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
+BEGIN
+    DROP PROCEDURE [dbo].[GET_ALL_SERVICE_REQUESTS_FOR_A_USER]
+END
+GO
+
+CREATE PROCEDURE GET_ALL_SERVICE_REQUESTS_FOR_A_USER
+@UserId varchar(20)
+AS
+	
+	DECLARE @RoleID int	
+
+	select @RoleId=RoleId FROM ESEVA.DBO."USER" Where UserId=@UserId
+
+	IF(@RoleId=3)
+		BEGIN
+			SELECT SR.ServiceRequestId,SR.UpdatedBy,SR.RequestedBy,SR.RequestedFor,SR.ServiceId, S.StatusName,SR.DocumentId,L.LanguageName,SR.ServiceRequestDescription,SR.CreatedDate,SR.ModifiedDate 
+			FROM SERVICEREQUEST AS SR 
+			JOIN STATUS AS S ON S.StatusID=SR.StatusId 
+			JOIN LANGUAGE AS L ON L.LanguageID=SR.LanguageId
+			JOIN SERVICE AS SC On SR.ServiceId=SC.ServiceId
+			ORDER BY CreatedDate DESC
+		END
+	ELSE
+		BEGIN
+			SELECT SR.ServiceRequestId,SR.UpdatedBy,SR.RequestedBy,SR.RequestedFor,SR.ServiceId, S.StatusName,SR.DocumentId,L.LanguageName,SR.ServiceRequestDescription,SR.CreatedDate,SR.ModifiedDate 
+			FROM SERVICEREQUEST AS SR 
+			JOIN STATUS AS S ON S.StatusID=SR.StatusId 
+			JOIN LANGUAGE AS L ON L.LanguageID=SR.LanguageId
+			JOIN SERVICE AS SC On SR.ServiceId=SC.ServiceId
+			WHERE RequestedBy=@UserId OR RequestedFor=@UserId 
+			ORDER BY CreatedDate DESC
+		END
+GO

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
@@ -31,10 +30,11 @@ public class EsevaJWTTokenProvider {
     @Autowired
     private EsevaUserDetails esevaUserDetails;
 
-    public String createToken(String userId, String roleName, String sessionId) {
+    public String createToken(String userId, String roleName, String sessionId, String userName) {
         Claims claims = Jwts.claims().setSubject(userId);
         claims.put("auth", roleName);
         claims.put("session-id", sessionId);
+        claims.put("user-name", userName);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -67,6 +67,10 @@ public class EsevaJWTTokenProvider {
 
     public String getRoleName(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("auth").toString();
+    }
+
+    public String getUserName(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("user-name").toString();
     }
 
     public String resolveToken(HttpServletRequest req) {

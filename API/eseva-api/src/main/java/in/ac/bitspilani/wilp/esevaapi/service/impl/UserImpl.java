@@ -53,8 +53,10 @@ public class UserImpl implements IUser {
                                                                 generateHash(registrationRequest.getPassword()),
                                                                 blob);
 
+        Integer errorCode = Integer.parseInt(validateNullStringInMap(map.get("errorCode")));
+        String errorMessage = validateNullStringInMap(map.get("errorMessage"));
 
-        if(Integer.parseInt(validateNullStringInMap(map.get("errorCode")))==0 && map.get("errorMessage")==null)
+        if(errorCode==0 && errorMessage==null)
         {
             registrationResponse.setDocumentId(map.get("DocumentId").toString());
             registrationResponse.setStatusName(map.get("StatusName").toString());
@@ -62,8 +64,8 @@ public class UserImpl implements IUser {
         }
         else
         {
-            registrationResponse.setErrorCode(Integer.parseInt(map.get("errorCode").toString()));
-            registrationResponse.setErrorMessage(map.get("errorMessage").toString());
+            registrationResponse.setErrorCode(errorCode);
+            registrationResponse.setErrorMessage(errorMessage);
             registrationResponse.setHttpStatusCode(500);
         }
         return registrationResponse;
@@ -84,7 +86,7 @@ public class UserImpl implements IUser {
         String errorMessage = validateNullStringInMap(map.get("errorMessage"));
 
         if(isLoginSuccessful == 1) {
-            String accessToken = eSevaJWTTokenProvider.createToken(loginRequest.getUserId(), roleName, sessionId);
+            String accessToken = eSevaJWTTokenProvider.createToken(loginRequest.getUserId(), roleName, sessionId, userName);
             response.setHttpStatusCode(200);
             response.setAccessToken(accessToken);
             response.setUserName(userName);

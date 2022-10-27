@@ -154,6 +154,7 @@ BEGIN
 	StatusId int FOREIGN KEY REFERENCES STATUS(StatusId),
 	DocumentId varchar(50) FOREIGN KEY REFERENCES DOCUMENT(DocumentId),
 	LanguageId int FOREIGN KEY REFERENCES LANGUAGE(LanguageId),
+	ServiceRequestDescription nvarchar(4000) NOT NULL,
 	CreatedDate DATETIME2 NOT NULL,
 	ModifiedDate DATETIME2 NOT NULL
 	)
