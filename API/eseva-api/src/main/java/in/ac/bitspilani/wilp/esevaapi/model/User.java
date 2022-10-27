@@ -20,7 +20,7 @@ import java.util.Date;
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "StatusName", type = String.class),
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "DocumentId", type = String.class),
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorCode", type = Integer.class),
-        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorMessage", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorMessage", type = String.class)
 })
 @NamedStoredProcedureQuery(name="VALIDATE_USER_LOGIN", procedureName = "VALIDATE_USER_LOGIN", parameters = {
         @StoredProcedureParameter(mode= ParameterMode.IN,name = "UserId", type = String.class),
@@ -32,7 +32,13 @@ import java.util.Date;
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "SessionId", type = String.class),
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "StatusName", type = String.class),
         @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorCode", type = Integer.class),
-        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorMessage", type = String.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorMessage", type = String.class)
+})
+@NamedStoredProcedureQuery(name = "UPDATE_USER_STATUS", procedureName = "UPDATE_USER_STATUS", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "UserId", type = String.class),
+        @StoredProcedureParameter(mode=ParameterMode.IN,name = "StatusId", type = Integer.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorCode", type = Integer.class),
+        @StoredProcedureParameter(mode= ParameterMode.OUT,name = "errorMessage", type = String.class)
 })
 public class User {
     @Id

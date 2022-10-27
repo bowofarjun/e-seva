@@ -160,27 +160,3 @@ BEGIN
 	)
 END
 GO
-
-IF NOT EXISTS(select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME='NOTIFICATION' and TABLE_CATALOG='ESEVA')
-BEGIN
-	CREATE TABLE NOTIFICATION
-	(
-		NotificationId varchar(50) PRIMARY KEY NOT NULL,
-		receiverEmailId varchar(330) NOT NULL FOREIGN KEY REFERENCES "USER"(EmailId),
-		SenderEmailId varchar(330) NOT NULL,
-		ServiceRequestId varchar(50) FOREIGN KEY REFERENCES SERVICEREQUEST(ServiceRequestId)
-	)
-END
-GO
-
-IF NOT EXISTS(select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME='FEEDBACK' and TABLE_CATALOG='ESEVA' )
-BEGIN
-	CREATE TABLE FEEDBACK
-	(
-		FeedbackId varchar(50) PRIMARY KEY NOT NULL,
-		FeedbackMessage varchar(500),
-		FeedbackSubject varchar(100) NOT NULL,
-		UserId varchar(20) FOREIGN KEY REFERENCES "USER"(UserId)
-	)
-END
-GO

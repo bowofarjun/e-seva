@@ -53,6 +53,11 @@ const NewServiceRequest = ()=>{
 
     const onSubmitButton=(e)=>{
         e.preventDefault();
+
+        if(localStorage.getItem('roleName')==='CITIZEN')
+        {
+            setNewServiceRequestData({...newServiceRequestData,requestedFor:localStorage.getItem('userId')})
+        }
         
         console.log(newServiceRequestData);
 
@@ -91,9 +96,15 @@ const NewServiceRequest = ()=>{
             <ToastContainer className={".Toastify__progress-bar"} style={{background:'#222222'}}/>
             <h2>Raise New Service Request</h2> 
                 <Form id="new-service-request-form">
+                    {localStorage.getItem('roleName')==='CITIZEN'?
+                    <Form.Group className="mb-3" controlId="userId">
+                        <Form.Label>Requested For UserId</Form.Label>
+                        <Form.Control type="text" placeholder={localStorage.getItem('userId')} disabled onChange={(e)=>{setNewServiceRequestData({...newServiceRequestData,requestedFor:e.target.value})}} />
+                    </Form.Group>
+                    :
                     <Form.Group className="mb-3" controlId="userId">
                         <Form.Control type="text" placeholder="Requested For UserId" onChange={(e)=>{setNewServiceRequestData({...newServiceRequestData,requestedFor:e.target.value})}} />
-                    </Form.Group>
+                    </Form.Group>}
                     <Form.Select className="mb-3" aria-label="SERVICE" style={{marginBottom:"1rem !important"}} onChange={(e)=>{setNewServiceRequestData({...newServiceRequestData, serviceId:e.target.value})}}>
                         <option value="0">Select Your Service</option>
                         {

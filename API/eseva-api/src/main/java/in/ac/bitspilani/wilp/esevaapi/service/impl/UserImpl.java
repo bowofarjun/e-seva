@@ -2,10 +2,7 @@ package in.ac.bitspilani.wilp.esevaapi.service.impl;
 
 import com.microsoft.sqlserver.jdbc.StringUtils;
 import in.ac.bitspilani.wilp.esevaapi.access.EsevaJWTTokenProvider;
-import in.ac.bitspilani.wilp.esevaapi.model.LoginRequest;
-import in.ac.bitspilani.wilp.esevaapi.model.LoginResponse;
-import in.ac.bitspilani.wilp.esevaapi.model.RegistrationRequest;
-import in.ac.bitspilani.wilp.esevaapi.model.RegistrationResponse;
+import in.ac.bitspilani.wilp.esevaapi.model.*;
 import in.ac.bitspilani.wilp.esevaapi.repository.UserRepository;
 import in.ac.bitspilani.wilp.esevaapi.service.IUser;
 import lombok.RequiredArgsConstructor;
@@ -125,6 +122,29 @@ public class UserImpl implements IUser {
                 response.setStatus(statusName);
             }
         }
+        return response;
+    }
+
+    @Override
+    public UpdateUserStatusResponse updateUserStatus(UpdateUserStatusRequest updateUserStatusRequest) {
+        Map<String,?> map = userRepository.UPDATE_USER_STATUS(updateUserStatusRequest.getUserId(),updateUserStatusRequest.getStatusId());
+
+        Integer errorCode = Integer.parseInt(validateNullStringInMap(map.get("errorCode")));
+        String errorMessage = validateNullStringInMap(map.get("errorMessage"));
+
+        UpdateUserStatusResponse response = new UpdateUserStatusResponse();
+
+        if(errorCode==0 && errorMessage==null)
+        {
+            response.setHttpStatusCode(200);
+        }
+        else
+        {
+            response.setErrorCode(errorCode);
+            response.setHttpStatusCode(500);
+            response.setErrorMessage(errorMessage);
+        }
+
         return response;
     }
 }

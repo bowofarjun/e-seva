@@ -24,4 +24,7 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
                                       @Param("ServiceRequestDescription") String serviceRequestDescription,
                                       @Param("Document") Blob document
                                       );
+
+    @Procedure(name = "UPDATE_SERVICE_REQUEST_STATUS")
+    Map<String,?> UPDATE_SERVICE_REQUEST_STATUS(@Param("ServiceRequestId") String serviceRequestId, @Param("StatusId") Integer statusId);
 }

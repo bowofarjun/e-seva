@@ -1,8 +1,6 @@
 package in.ac.bitspilani.wilp.esevaapi.service.impl;
 
-import in.ac.bitspilani.wilp.esevaapi.model.NewServiceRequestRequest;
-import in.ac.bitspilani.wilp.esevaapi.model.NewServiceRequestResponse;
-import in.ac.bitspilani.wilp.esevaapi.model.ServiceRequest;
+import in.ac.bitspilani.wilp.esevaapi.model.*;
 import in.ac.bitspilani.wilp.esevaapi.repository.ServiceRequestRepository;
 import in.ac.bitspilani.wilp.esevaapi.service.IServiceRequest;
 import in.ac.bitspilani.wilp.esevaapi.util.EsevaUtil;
@@ -70,5 +68,29 @@ public class ServiceRequestImpl implements IServiceRequest {
         }
 
         return newServiceRequestResponse;
+    }
+
+    @Override
+    public UpdateServiceRequestStatusResponse updateServiceRequestStatus(UpdateServiceRequestStatusRequest updateServiceRequestStatusRequest) {
+        Map<String,?> map = serviceRequestRepository.UPDATE_SERVICE_REQUEST_STATUS(updateServiceRequestStatusRequest.getServiceRequestId(), updateServiceRequestStatusRequest.getStatusId());
+
+        Integer errorCode = Integer.parseInt(validateNullStringInMap(map.get("errorCode")));
+        String errorMessage = validateNullStringInMap(map.get("errorMessage"));
+
+        UpdateServiceRequestStatusResponse response= new UpdateServiceRequestStatusResponse();
+
+        if(errorCode==0 && errorMessage==null)
+        {
+            response.setHttpStatusCode(200);
+        }
+        else
+        {
+            response.setErrorCode(errorCode);
+            response.setHttpStatusCode(500);
+            response.setErrorMessage(errorMessage);
+        }
+
+        return response;
+
     }
 }
