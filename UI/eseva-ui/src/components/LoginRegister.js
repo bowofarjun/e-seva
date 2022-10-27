@@ -1,150 +1,176 @@
-import {React} from "react";
+import {React, useState, useEffect} from "react";
 import { Col, Container, Row, Form, Button } from "react-bootstrap";
+import axios from "axios";
+import {ToastContainer, toast} from 'react-toastify';
 
-const LoginRegister=(props)=>{
+const LoginRegister=()=>{
 
-    let roleList = [
-        {
-            "roleId": 1,
-            "roleName": "CITIZEN"
-        },
-        {
-            "roleId": 2,
-            "roleName": "VENDOR"
-        },
-        {
-            "roleId": 3,
-            "roleName": "ADMIN"
-        }
-    ];
+    const [roleList,setRoleList]=useState([]);
+    const [languageList, setLanguageList] =useState([]);
+    const [loginData, setLoginData]=useState({userId:null,password:null});
+    const [registerData, setRegisterData]=useState({userId:null,roleId:0,userName:null,languageId:0,phoneNumber:null,password:null,document:null,emailId:null});
 
-    let languageList = [
-        {
-            "languageId": 1,
-            "languageName": "Hindi"
-        },
-        {
-            "languageId": 2,
-            "languageName": "English"
-        },
-        {
-            "languageId": 3,
-            "languageName": "Bengali"
-        },
-        {
-            "languageId": 4,
-            "languageName": "Marathi"
-        },
-        {
-            "languageId": 5,
-            "languageName": "Telugu"
-        },
-        {
-            "languageId": 6,
-            "languageName": "Tamil"
-        },
-        {
-            "languageId": 7,
-            "languageName": "Gujarati"
-        },
-        {
-            "languageId": 8,
-            "languageName": "Urdu"
-        },
-        {
-            "languageId": 9,
-            "languageName": "Kannada"
-        },
-        {
-            "languageId": 10,
-            "languageName": "Odia"
-        },
-        {
-            "languageId": 11,
-            "languageName": "Malayalam"
-        },
-        {
-            "languageId": 12,
-            "languageName": "Punjabi"
-        },
-        {
-            "languageId": 13,
-            "languageName": "Assamese"
-        },
-        {
-            "languageId": 14,
-            "languageName": "Maithili"
-        },
-        {
-            "languageId": 15,
-            "languageName": "Meitei"
-        },
-        {
-            "languageId": 16,
-            "languageName": "Sanskrit"
-        }
-    ];
+    useEffect(()=>{
+        loadRoles();
+        loadLanguages();
+    },[]);
+    
+    const loadRoles=()=>
+    {
+        let headers = {
+            'Content-Type': 'application/json'
+        };
 
+        let url='/api/role';
+
+        axios.get(url, {headers: headers}).then(
+            (response)=>{
+                console.log(response.data)
+                setRoleList(response.data);
+            },
+            (error)=>{
+                console.log(error)
+            }
+        );
+    };
+
+    const loadLanguages=()=>{
+        let headers = {
+            'Content-Type': 'application/json'
+        };
+
+        let url='/api/language';
+
+        axios.get(url, {headers: headers}).then(
+            (response)=>{
+                console.log(response.data)
+                setLanguageList(response.data);
+            },
+            (error)=>{
+                console.log(error)
+            }
+        );
+    }
+
+    const onSignInButtonSubmit=(e)=>{
+        e.preventDefault();
+
+        let headers = {
+            'Content-Type': 'application/json'
+        };
+
+        let url='/api/user/sign-in'
+
+        axios.post(url,loginData,{headers:headers}).then(
+            (response)=>{
+                console.log(response.data)
+                localStorage.setItem('userId',loginData.userId)
+                clearForm("signin-form");
+                setLoginData({userId:null,password:null})
+                notify("LOGIN SUCCESSFUL", true)
+                window.location.replace("/");
+                
+                
+            },
+            (error)=>{
+                console.log(error);
+                notify("ERROR OCURRED WHILE LOGGING IN", false)
+            }
+        );          
+    }
+
+    const onSignUpButtonSubmit=(e)=>{
+        e.preventDefault();
+
+        let headers={
+            'Content-Type': 'multipart/form-data'
+        };
+
+        let url='/api/user/sign-up';
+
+        axios.post(url,registerData,{headers:headers}).then(
+            (response)=>{
+                console.log(response.data)
+                clearForm("signup-form");
+                setRegisterData({userId:null,roleId:0,userName:null,languageId:0,phoneNumber:null,password:null,document:null,emailId:null});
+                notify("USER REGISTERATION SUCCESSFUL WITH PENDING STATUS. YOU WILL BE ABLE TO LOGIN ONCE ADMIN APPROVES.", true)            
+            },
+            (error)=>{
+                console.log(error);
+                notify("ERROR OCURRED WHILE USER REGISTRATION", false)
+            }
+        );   
+    }
+
+    const clearForm=(formId)=>{
+        document.getElementById(formId).reset();
+    }
+
+    const notify =(message, flag)=>{
+        flag===true? toast.success(message) : toast.error(message);
+    }
+    
     return (
         <>
             <Container style={{align:"center", height:"85vh", width:"60vw"}}>
+                <ToastContainer className={".Toastify__progress-bar"} style={{background:'#222222'}}/>
                 <Row style={{height:"70vh"}}>
-                    <Col style={{background:"white", textAlign:"center", margin:"4vh 4vw 48vh 4vw", boxShadow:"rgb(38, 57, 77) 0px 20px 30px -10px"}}>
-                        <h5>Already have an account?</h5>
+                    <Col style={{background:"white", textAlign:"center", margin:"1vh 4vw 48vh 4vw", boxShadow:"rgb(38, 57, 77) 0px 20px 30px -10px"}}>
+                        <h6>Already have an account?</h6>
                         <h2>Sign-In</h2>
                         <hr></hr>
                         <Container>
-                            <Form>
+                            <Form id="signin-form">
                                 <Form.Group className="mb-3" controlId="userId">
-                                    <Form.Control type="text" placeholder="Please enter your user id" />
+                                    <Form.Control type="text" placeholder="Please enter your user id" onChange={(e)=>{setLoginData({...loginData,userId:e.target.value})}} />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="password">
-                                    <Form.Control type="password" placeholder="Please enter your password" />
+                                    <Form.Control type="password" placeholder="Please enter your password" onChange={(e)=>{setLoginData({...loginData,password:e.target.value})}} />
                                     </Form.Group>
-                                <Button variant="primary" type="submit">
+                                <Button variant="primary" type="submit" onClick={onSignInButtonSubmit}>
                                     Sign In
                                 </Button>
                             </Form>
                         </Container>
                     </Col>
-                    <Col style={{background:"white", height:"82vh", textAlign:"center",  margin:"4vh 4vw 1vh 4vw", boxShadow:"rgb(38, 57, 77) 0px 20px 30px -10px"}}>
-                        <h5>Are you a new user?</h5>
+                    <Col style={{background:"white", height:"82vh", textAlign:"center",  margin:"1vh 4vw 1vh 4vw", boxShadow:"rgb(38, 57, 77) 0px 20px 30px -10px"}}>
+                        <h6>Are you a new user?</h6>
                         <h2>Sign-Up</h2>
                         <hr></hr>
                         <Container>
-                            <Form>
+                            <Form id="signup-form">
                                 <Form.Group className="mb-3" controlId="userId">
-                                    <Form.Control type="text" placeholder="Please Enter Your User Id" />
+                                    <Form.Control type="text" placeholder="Please Enter Your User Id" onChange={(e)=>{setRegisterData({...registerData, userId:e.target.value})}}/>
                                 </Form.Group>
-                                <Form.Select className="mb-3" aria-label="ROLE" style={{marginBottom:"1rem !important;"}}>
+                                <Form.Select className="mb-3" aria-label="ROLE" style={{marginBottom:"1rem !important"}} onChange={(e)=>{setRegisterData({...registerData, roleId:e.target.value})}}>
                                     <option value="0">Select Your Role</option>
                                     {
                                         roleList.map((role)=><option value={role.roleId}>{role.roleName}</option>)
                                     }
                                 </Form.Select>
                                 <Form.Group className="mb-3" controlId="userName">
-                                    <Form.Control type="text" placeholder="Please Enter Your Name" />
+                                    <Form.Control type="text" placeholder="Please Enter Your Name" onChange={(e)=>{setRegisterData({...registerData, userName:e.target.value})}}/>
                                 </Form.Group>
-                                <Form.Select className="mb-3" aria-label="LANGUAGE" style={{marginBottom:"1rem !important;"}}>
+                                <Form.Select className="mb-3" aria-label="LANGUAGE" style={{marginBottom:"1rem !important"}} onChange={(e)=>{setRegisterData({...registerData, languageId:e.target.value})}}>
                                     <option value="0">Select Your Language</option>
                                     {
                                         languageList.map((language)=><option value={language.languageId}>{language.languageName}</option>)
                                     }
                                 </Form.Select>
                                 <Form.Group className="mb-3" controlId="phoneNumber">
-                                    <Form.Control type="text" placeholder="Please Enter Your Phone Number" />
+                                    <Form.Control type="text" placeholder="Please Enter Your Phone Number" onChange={(e)=>{setRegisterData({...registerData, phoneNumber:e.target.value})}} />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="emailId">
-                                    <Form.Control type="email" placeholder="Please Enter Your Email Id" />
+                                    <Form.Control type="email" placeholder="Please Enter Your Email Id" onChange={(e)=>{setRegisterData({...registerData, emailId:e.target.value})}}/>
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="password">
-                                    <Form.Control type="password" placeholder="Please Enter Your Password" />
+                                    <Form.Control type="password" placeholder="Please Enter Your Password" onChange={(e)=>{setRegisterData({...registerData, password:e.target.value})}}/>
                                 </Form.Group>
-                                <Form.Group controlId="formFile" className="mb-3">
+                                <Form.Group controlId="formFile" className="mb-3" onChange={(e)=>{setRegisterData({...registerData, document:e.target.files[0]})}}>
                                     <Form.Label>Upload Your Id Proof</Form.Label>
                                     <Form.Control type="file" />
                                 </Form.Group>
-                                <Button variant="secondary" type="submit">
+                                <Button variant="secondary" type="submit" onClick={onSignUpButtonSubmit}>
                                     Sign-Up
                                 </Button>
                             </Form>

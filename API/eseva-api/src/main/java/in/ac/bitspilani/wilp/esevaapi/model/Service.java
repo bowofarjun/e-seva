@@ -21,4 +21,8 @@ public class Service {
     @Column
     @Getter @Setter
     private String serviceDescription;
+
+    @Column
+    @Getter @Setter
+    private String serviceImgLoc;
 }

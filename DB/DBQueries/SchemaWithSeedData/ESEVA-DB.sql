@@ -80,14 +80,19 @@ BEGIN
 	(
 	ServiceId int IDENTITY(1,1) PRIMARY KEY,
 	ServiceName varchar(50) NOT NULL,
-	ServiceDescription varchar(250) NOT NULL
+	ServiceDescription varchar(250) NOT NULL,
+	ServiceImgLoc varchar(100) NOT NULL
 	)
 
 	INSERT INTO SERVICE 
-	(ServiceName,ServiceDescription)
+	(ServiceName,ServiceDescription,ServiceImgLoc)
 	VALUES
-	('Request New PAN Card','Through E-Seva, you can now request for a new PAN card.'),
-	('Update PAN Card Details','Through E-Seva, you can now raise a request for updating the details in your existing PAN card.')
+	('Fastag','We are authorized Corporate Partner for FASTag product in India. We have the facility of FASTag Retail Agent for distributing.','/service-fastag.png'),
+	('Pan Card','We are leading PAN card agency provider and with us you can start an online / authorized PAN Card Center of the UTIITSL.','/service-pan-card.png'),
+	('Digital Signature','e-Seva is designed to help partners offer DSC services without large capital associated with building and maintaining.','/service-digital-signature.jpg'),
+	('Ayushman Card','The Pradhan Mantri Jan Arogya Yojana (PMJAY) popularly known as Ayushman Bharat Yojana Scheme.','/service-ayushman-yojna.jpeg'),
+	('ITR Service','Income Tax Return (ITR) is a form in which the taxpayers file information about his income earned and tax applicable to.','/service-itr_service.png'),
+	('GST Suvidha','GST Suvidha- GST Suvidha is considered as an enabler or authorised intermediary for businesses to access GST portal services.','/service-gst.png')
 END
 GO
 
@@ -149,6 +154,7 @@ BEGIN
 	StatusId int FOREIGN KEY REFERENCES STATUS(StatusId),
 	DocumentId varchar(50) FOREIGN KEY REFERENCES DOCUMENT(DocumentId),
 	LanguageId int FOREIGN KEY REFERENCES LANGUAGE(LanguageId),
+	ServiceRequestDescription nvarchar(4000) NOT NULL,
 	CreatedDate DATETIME2 NOT NULL,
 	ModifiedDate DATETIME2 NOT NULL
 	)
