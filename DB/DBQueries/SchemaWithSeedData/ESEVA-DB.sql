@@ -125,6 +125,19 @@ BEGIN
 		UpdatedBy varchar(20) FOREIGN KEY REFERENCES "USER"(UserId),
 		LoginAttempts int DEFAULT (0) CHECK(LoginAttempts <=5 AND LoginAttempts >=0)
 	)
+
+	INSERT INTO DOCUMENT
+	(DocumentId, ParentDocumentId, DocumentInfo)
+	VALUES
+	('63E7C3E0-FF93-4A47-BB9A-610C3F9838FF','63E7C3E0-FF93-4A47-BB9A-610C3F9838FF',convert(varbinary, ''))
+
+
+
+	INSERT INTO "USER"
+	(UserId,RoleId,UserName,DocumentId,StatusId,LanguageId,PhoneNumber,EmailId,Password,CreatedDate,ModifiedDate,UpdatedBy,LoginAttempts)
+	VALUES
+	('admin',3,'Admin User','63E7C3E0-FF93-4A47-BB9A-610C3F9838FF',	1,	1,'9876543210', 'admin@email.com','4B9DB269C5F978E1264480B0A7619EEA','2022-11-03 04:06:51.3666667',	'2022-11-03 04:06:51.3666667','admin',0)
+
 END
 GO
 
